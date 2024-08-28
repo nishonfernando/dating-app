@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -10,6 +10,9 @@ import { FormsModule } from '@angular/forms';
 })
 export class RegisterComponent {
   usersFromHomeComponent = input.required<any>();
+  //This is the old way of doing an output. Needs to import Output and EventEmitter.
+  //@Output() cancelRegister = new EventEmitter();
+  cancelRegister = output<boolean>();
   model: any = {};
 
   register() {
@@ -17,6 +20,6 @@ export class RegisterComponent {
   }
 
   cancel() {
-    console.log('cancelled');
+    this.cancelRegister.emit(true);
   }
 }

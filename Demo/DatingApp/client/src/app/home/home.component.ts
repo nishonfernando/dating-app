@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent implements OnInit{
+export class HomeComponent implements OnInit {
   http = inject(HttpClient);
   registerMode = true;
   users: any;
@@ -20,6 +20,10 @@ export class HomeComponent implements OnInit{
 
   registerToggle() {
     this.registerMode = !this.registerMode;
+  }
+
+  cancelRegisterMode(event: boolean) {
+    this.registerMode = event;
   }
 
   getUsers() {
