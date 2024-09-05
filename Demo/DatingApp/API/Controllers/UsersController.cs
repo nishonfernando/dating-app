@@ -21,7 +21,7 @@ public class UsersController(IUserRepository userRepository, IMapper mapper, IPh
     }
 
     [HttpGet("{username}")]
-    public async Task<ActionResult<MemberDto>> GetUsers(string username)
+    public async Task<ActionResult<MemberDto>> GetUser(string username)
     {
         var user = await userRepository.GetMemberByUsernameAsync(username);
 
@@ -45,14 +45,15 @@ public class UsersController(IUserRepository userRepository, IMapper mapper, IPh
     }
 
     [HttpPost("add-photo")]
-    public async Task<ActionResult<PhotoDto>> AddPhoto(IFormFile file){
+    public async Task<ActionResult<PhotoDto>> AddPhoto(IFormFile file)
+    {
 
         var user = await userRepository.GetUserByUsernameAsync(User.GetUsername());
 
         if (user == null) return BadRequest("Cannot update user");
 
         var result = await photoService.AddPhotoAsync(file);
-        
+
         if (result.Error != null) return BadRequest(result.Error.Message);
 
         var photo = new Photo
@@ -63,8 +64,12 @@ public class UsersController(IUserRepository userRepository, IMapper mapper, IPh
 
         user.Photos.Add(photo);
 
-        if (await userRepository.SaveAllAsync()) 
-            return  mapper.Map<PhotoDto>(photo);
+        if (await userRepository.SaveAllAsync())
+            //Instead of sending back 200 OK , we are sending 201 created (successfully),
+            // with the location parameter on where to get the image, in this case the full user details.
+            return CreatedAtAction(nameof(GetUser),
+                new { username = user.UserName },
+                mapper.Map<PhotoDto>(photo));
 
         return BadRequest("Problem adding photo");
     }
