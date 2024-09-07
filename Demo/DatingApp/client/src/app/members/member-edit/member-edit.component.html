@@ -33,7 +33,8 @@
                 </div>
             </div>
             <div class="card-footer">
-                <button [disabled]="!editForm.dirty" form="editForm" type="submit" class="btn btn-success col-12">Save</button>
+                <button [disabled]="!editForm.dirty" form="editForm" type="submit"
+                    class="btn btn-success col-12">Save</button>
             </div>
         </div>
     </div>
@@ -59,7 +60,7 @@
                 </form>
             </tab>
             <tab heading="Edit Photos">
-                <app-photo-editor [member]="member"></app-photo-editor>
+                <app-photo-editor [member]="member" (memberChange)="onMemberChange($event)"></app-photo-editor>
             </tab>
         </tabset>
     </div>
