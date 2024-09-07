@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using API.DTOs;
 using API.Entities;
 using API.Extensions;
@@ -72,5 +71,25 @@ public class UsersController(IUserRepository userRepository, IMapper mapper, IPh
                 mapper.Map<PhotoDto>(photo));
 
         return BadRequest("Problem adding photo");
+    }
+
+    [HttpPut("set-main-photo/{photoId:int}")]
+    public async Task<ActionResult> SetMainPhoto(int photoId)
+    {
+        var user = await userRepository.GetUserByUsernameAsync(User.GetUsername());
+
+        if (user == null) return BadRequest("Could not find user");
+
+        var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
+
+        if (photo == null || photo.IsMain) return BadRequest("Cannot make changes for this id");
+
+        var currentMain = user.Photos.FirstOrDefault(x => x.IsMain);
+        if (currentMain != null) currentMain.IsMain = false;
+        photo.IsMain = true;
+
+        if (await userRepository.SaveAllAsync()) return NoContent();
+
+        return BadRequest("Problem occurred while setting the main photo!");
     }
 }
