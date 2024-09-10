@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, output } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { AccountService } from '../_services/account.service';
 import { ToastrService } from 'ngx-toastr';
 import { JsonPipe, NgIf } from '@angular/common';
@@ -15,6 +15,7 @@ import { TextInputComponent } from "../_forms/text-input/text-input.component";
 export class RegisterComponent implements OnInit {
   private accountService = inject(AccountService);
   private toastr = inject(ToastrService);
+  private fb = inject(FormBuilder);
   //This is the old way of doing an output. Needs to import Output and EventEmitter.
   //@Output() cancelRegister = new EventEmitter();
   cancelRegister = output<boolean>();
@@ -26,10 +27,10 @@ export class RegisterComponent implements OnInit {
   }
 
   initializeForm() {
-    this.registerForm = new FormGroup({
-      username: new FormControl('', Validators.required),
-      password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]),
-      confirmPassword: new FormControl('', [Validators.required, this.matchValues('password')])
+    this.registerForm = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]],
+      confirmPassword: ['', [Validators.required, this.matchValues('password')]]
     });
     //Listening and subscribing to form to check the changes
     this.registerForm.controls['password'].valueChanges.subscribe({
