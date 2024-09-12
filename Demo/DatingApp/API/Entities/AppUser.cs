@@ -19,6 +19,8 @@ public class AppUser
     public required string City { get; set; }
     public required string Country { get; set; }
     public List<Photo> Photos { get; set; } = [];
+    public List<UserLike> LikedUsers { get; set; } = [];
+    public List<UserLike> LikedByUsers { get; set; } = [];
 
     //If you have this logic here, the DB query will always get the full object from the table and select what's needed.
     //If you move this to the automapper configuration, the DB query will only take what's requested
