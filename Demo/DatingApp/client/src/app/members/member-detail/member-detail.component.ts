@@ -6,11 +6,12 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { Gallery, GalleryItem, GalleryModule, ImageItem } from 'ng-gallery';
 import { TimeagoModule } from 'ngx-timeago';
 import { DatePipe } from '@angular/common';
+import { MemeberMessagesComponent } from "../memeber-messages/memeber-messages.component";
 
 @Component({
   selector: 'app-member-detail',
   standalone: true,
-  imports: [TabsModule, GalleryModule, TimeagoModule, DatePipe],
+  imports: [TabsModule, GalleryModule, TimeagoModule, DatePipe, MemeberMessagesComponent],
   templateUrl: './member-detail.component.html',
   styleUrl: './member-detail.component.css'
 })
